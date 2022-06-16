@@ -156,13 +156,13 @@ function App() {
     <div className="container-xl mt-3">
       <h1 className="text-center">Presupuestador</h1>
       <div className="row mt-5">
-        <div className="col-xs-12 col-sm-6 col-md-5">
+        <div className="col-xs-12 col-sm-6 col-md-5 elegir-fecha">
           <h4>Elegir fecha: </h4>
           <div className="calendar-container">
             <Calendar onChange={setDate} value={date} locale={"es-ES"} />
           </div>
           <p>
-            <span className="bold">Fecha seleccionada: </span>
+            <span className="bold">Fecha elegida: </span>
             {fechaElegida}
           </p>
         </div>
@@ -192,33 +192,33 @@ function App() {
               options={entregas}
               // defaultValue={entregas[0]}
               onChange={handleEntrega}
-              isDisabled={isDisabled}
+              isDisabled={isDisabled || servicio.length < 1}
               placeholder="Seleccionar el monto de adelanto"
             ></Select>
           </div>
+          {(cuota < 0.5) | (servicio.length === 0) ? (
+            <div className="pt-5 mb-3 precio-total">
+              <h3>Seleccionar fecha, servicio/s y cuota/s.</h3>
+            </div>
+          ) : (
+            <div className="pt-5 mb-3 precio-total">
+              <h3>
+                Precio TOTAL: $
+                {precio ? new Intl.NumberFormat("de-DE").format(precio) : "0"}
+              </h3>
+
+              <h3>
+                ({cuotaValue}
+                {cuotaValue === 1 ? " pago de $" : "x cuotas de $"}
+                {precioCuota
+                  ? new Intl.NumberFormat("de-DE").format(precioCuota)
+                  : "0"}
+                )
+              </h3>
+            </div>
+          )}
         </div>
       </div>
-      {(cuota < 0.5) | (servicio.length === 0) ? (
-        <div className="text-center pt-5 mb-3 precio-total">
-          <h3 className="text-center">Seleccionar servicios y cuotas.</h3>
-        </div>
-      ) : (
-        <div className="text-center pt-5 mb-3 precio-total">
-          <h3>
-            Precio TOTAL: $
-            {precio ? new Intl.NumberFormat("de-DE").format(precio) : "0"}
-          </h3>
-
-          <h3>
-            ({cuotaValue}
-            {cuotaValue === 1 ? " pago de $" : "x cuotas de $"}
-            {precioCuota
-              ? new Intl.NumberFormat("de-DE").format(precioCuota)
-              : "0"}
-            )
-          </h3>
-        </div>
-      )}
     </div>
   );
 }

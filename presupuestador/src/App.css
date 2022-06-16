@@ -127,6 +127,11 @@
   color: white;
  }
 
+
+ .elegir-fecha {
+  height: 350px;
+ }
+
  @media (max-width: 576px) {
   .precio-total {
     position: initial !important;
