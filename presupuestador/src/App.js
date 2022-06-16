@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import Select from "react-select";
+import swal from "sweetalert";
+import "./css/bootstrap.min.css";
 
 function App() {
   const [date, setDate] = useState(new Date());
@@ -11,9 +13,7 @@ function App() {
   const [cuota, setCuota] = useState(1);
   const [isDisabled, setIsDisabled] = useState(true);
   const [precio, setPrecio] = useState("");
-
-  console.log(diferenciaMeses);
-  console.log(cuota.value);
+  const [entrega, setEntrega] = useState(0);
 
   const servicios = [
     { value: "book15clascio", label: "Book de 15 (Clásico)", price: 13900 },
@@ -25,7 +25,7 @@ function App() {
     { value: 1, label: "1x", porcentaje: 0 },
     { value: 3, label: "3x (sin interés)", porcentaje: 0 },
     { value: 6, label: "6x (sin interés)", porcentaje: 0 },
-    { value: 9, label: "9x", porcentaje: 30 },
+    { value: 9, label: "9x", porcentaje: 25 },
     { value: 12, label: "12x", porcentaje: 50 },
     { value: 18, label: "18x", porcentaje: 75 },
     { value: 24, label: "24x", porcentaje: 100 },
@@ -33,8 +33,20 @@ function App() {
     { value: 36, label: "36x", porcentaje: 150 },
   ];
 
-  if (diferenciaMeses < cuota.value) {
-    alert("Las cuotas deben finalizar antes de la fecha");
+  const entregas = [
+    { value: 0, label: "Sin entrega" },
+    { value: 3000, label: "$3000" },
+    { value: 4000, label: "$4000" },
+    { value: 5000, label: "$5000" },
+    { value: 6000, label: "$6000" },
+    { value: 7000, label: "$7000" },
+    { value: 8000, label: "$8000" },
+    { value: 9000, label: "$9000" },
+    { value: 10000, label: "$10000" },
+  ];
+
+  if (diferenciaMeses < cuota.value && cuota.value !== 1) {
+    swal("Las cuotas deben finalizar antes de la fecha elegida.");
     setCuota(1);
   }
 
@@ -44,6 +56,7 @@ function App() {
     if (e.length > 0) {
       setIsDisabled(false);
       setPrecio(totalConCuota);
+      setCuota(1);
     } else {
       setIsDisabled(true);
       setPrecio(0);
@@ -54,7 +67,20 @@ function App() {
   const handleCuota = (e) => {
     setCuota(e);
   };
-  const cuotaValue = cuota.value;
+  let cuotaValue = cuota.value;
+  let entregaValue = entrega.value;
+  let cuotaPorcentaje = cuota.porcentaje;
+
+  if (cuotaPorcentaje === undefined) {
+    cuotaPorcentaje = 1;
+  }
+
+  if (entregaValue === undefined) {
+    entregaValue = 0;
+  }
+  if (cuotaValue === undefined) {
+    cuotaValue = 1;
+  }
 
   // console.log(servicio.map((item) => item.price));
   //sumar los precios de los items servicio
@@ -63,8 +89,8 @@ function App() {
   //calcular el total con el porcentaje de la cuota
   const totalConCuota = total + (total * cuota.porcentaje) / 100;
 
-  const precioCuota = Math.round(totalConCuota / cuota.value);
-
+  const precioCuota = Math.round((totalConCuota - entregaValue) / cuotaValue);
+  console.log(cuota.porcentaje);
   // Creamos array con los meses del año
   const meses = [
     "enero",
@@ -111,6 +137,10 @@ function App() {
     setDiferenciaMeses(monthDiff(new Date(), new Date(date)));
   }, [date]);
 
+  const handleEntrega = (e) => {
+    setEntrega(e);
+  };
+
   useEffect(() => {
     if (servicio.length > 0) {
       setPrecio(totalConCuota);
@@ -118,39 +148,55 @@ function App() {
   }, [servicio, cuota, totalConCuota]);
 
   return (
-    <div className="app">
+    <div className="container-xl">
       <h1 className="text-center">Presupuestador</h1>
-      <div>
-        <h2>Elegir FECHA: </h2>
-        <div className="calendar-container">
-          <Calendar onChange={setDate} value={date} locale={"es-ES"} />
+      <div className="row">
+        <div className="col-xs-12 col-sm-6 col-md-6">
+          <h3>Seleccionar Fecha: </h3>
+          <div className="calendar-container">
+            <Calendar onChange={setDate} value={date} locale={"es-ES"} />
+          </div>
+          <p className="text-center">
+            <span className="bold">Fecha seleccionada: </span>
+            {fechaElegida}
+          </p>
         </div>
-        <p className="text-center">
-          <span className="bold">Fecha seleccionada: </span>
-          {fechaElegida}
-        </p>
+        <div className="col-xs-12 col-sm-6 col-md-6">
+          <h3>Elegir SERVICIO: </h3>
+          <Select
+            options={servicios}
+            isMulti
+            onChange={handleService}
+            placeholder="Selecciona el o los servicios"
+          />
+          <h3>¿En cuántas cuotas?</h3>
+          <Select
+            options={cuotas}
+            // defaultValue={cuotas[0]}
+            onChange={handleCuota}
+            isDisabled={isDisabled}
+            placeholder="Selecciona la cantidad de cuotas"
+          />
+          <h3>¿Queres hacer un adelanto? (opcional)</h3>
+          <Select
+            options={entregas}
+            // defaultValue={entregas[0]}
+            onChange={handleEntrega}
+            isDisabled={isDisabled}
+            placeholder="Selecciona el monto de adelanto"
+          ></Select>
+        </div>
+      </div>
 
-        <h2>Precio TOTAL: ${precio ? precio : "0"}</h2>
-        <h2>
-          ({cuotaValue}x cuotas de ${precioCuota ? precioCuota : "0"})
-        </h2>
-      </div>
-      <div>
-        <h2>Elegir SERVICIO: </h2>
-        <Select
-          options={servicios}
-          isMulti
-          onChange={handleService}
-          placeholder="Selecciona el o los servicios"
-        />
-        <h2>¿En cuántas cuotas?</h2>
-        <Select
-          options={cuotas}
-          onChange={handleCuota}
-          isDisabled={isDisabled}
-          placeholder="Selecciona la cantidad de cuotas"
-        />
-      </div>
+      <h3>
+        Precio TOTAL: $
+        {precio ? new Intl.NumberFormat("de-DE").format(precio) : "0"}
+      </h3>
+      <h3>
+        ({cuotaValue}x cuotas de $
+        {precioCuota ? new Intl.NumberFormat("de-DE").format(precioCuota) : "0"}
+        )
+      </h3>
     </div>
   );
 }
