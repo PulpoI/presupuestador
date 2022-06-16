@@ -63,15 +63,15 @@ function App() {
     }
   };
 
-  const handleCuota = (e) => {
+  function handleCuota(e) {
     setCuota(e);
-  };
+  }
 
   useEffect(() => {
     if (servicio.length < 1) {
-      setCuota("");
+      handleCuota(1);
     }
-  }, [servicio]);
+  }, [servicio, cuota]);
 
   let cuotaValue = cuota.value;
   let entregaValue = entrega.value;
@@ -152,6 +152,8 @@ function App() {
     }
   }, [servicio, cuota, totalConCuota]);
 
+  console.log(servicio, cuota, cuotaValue);
+
   return (
     <div className="container-xl mt-3">
       <h1 className="text-center">Presupuestador</h1>
@@ -175,6 +177,17 @@ function App() {
               onChange={handleService}
               placeholder="Seleccionar el servicio. (Puede ser más de uno)"
             />
+            <p>
+              (Visita{" "}
+              <a
+                href="https://camilagonzalez.ar/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                https://camilagonzalez.ar/
+              </a>{" "}
+              para mas detalles.)
+            </p>
           </div>
           <div className="mb-3">
             <h4>¿En cuántas cuotas?</h4>
