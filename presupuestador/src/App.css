@@ -126,3 +126,9 @@
   background: #6f48eb;
   color: white;
  }
+
+ @media (max-width: 576px) {
+  .precio-total {
+    position: initial !important;
+  }
+ }
