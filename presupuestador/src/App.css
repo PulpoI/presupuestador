@@ -1,43 +1,57 @@
-.App {
-  text-align: center;
+@import url("https://fonts.googleapis.com/css2?family=Reenie+Beanie&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,600;1,500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,500;1,300&display=swap");
+
+@font-face {
+  font-family: 'bromello';
+  font-style: normal;
+  font-weight: 400;
+  src: local("bromello"), url("https://fonts.cdnfonts.com/s/13894/bromello.woff") format("woff"); }
+
+ .logo {
+  font-family: 'bromello'!important;
+  font-size: 2rem;
+  color: #BF7154;
+  text-shadow: 2px 0px 0px #f0f2ae;
+  text-decoration: none;
+}
+.logo:hover {
+  color: #594F57 !important;
+}
+body{
+  font-family: 'Raleway', sans-serif !important;
+  background-image: url(../src/assets/image-light-2.webp);
+  color: #594F57 !important;
+}
+div{
+  font-family: 'Raleway', sans-serif !important;
+}
+span{
+  font-family: 'Raleway', sans-serif !important;
+}
+abbr{
+  font-family: 'Raleway', sans-serif !important;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+h1{
+  font-family: "Reenie Beanie", cursive, italic !important;
+}
+h3, h4{
+
+  font-family: 'Raleway', sans-serif !important;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.swal-button{
+  background-color: #BF7154 !important;
+  color: #fff !important;
+}
+.swal-button:hover{
+  background-color: #594F57 !important;
+  color: #fff !important;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-
+/* styles reac calendar */
 .react-calendar { 
   width: 400px;
   max-width: 100%;
@@ -128,12 +142,22 @@
  }
 
 
- .elegir-fecha {
-  height: 350px;
- }
-
+ /* media query smartphones */
  @media (max-width: 576px) {
+   nav{
+     text-align: center!important;
+     margin-bottom: 1rem !important;
+   }
+
+    .servicios, .cuotas, .adelanto{
+     margin-top:2rem;
+     background-color: #bf71542a ;
+     padding: 1rem;
+   }
   .precio-total {
     position: initial !important;
+    padding-bottom: 2rem;
+   text-align: center;
   }
+ 
  }

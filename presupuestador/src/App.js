@@ -90,9 +90,10 @@ function App() {
 
   //sumar los precios de los items servicio
   const total = servicio.map((item) => item.price).reduce((a, b) => a + b, 0);
-
   //calcular el total con el porcentaje de la cuota
-  const totalConCuota = total + (total * cuota.porcentaje) / 100;
+  const totalConEntrega = total - entregaValue;
+
+  const totalConCuota = total + (totalConEntrega * cuota.porcentaje) / 100;
 
   const precioCuota = Math.round((totalConCuota - entregaValue) / cuotaValue);
 
@@ -152,25 +153,35 @@ function App() {
     }
   }, [servicio, cuota, totalConCuota]);
 
-  console.log(servicio, cuota, cuotaValue);
-
   return (
     <div className="container-xl mt-3">
-      <h1 className="text-center">Presupuestador</h1>
+      <nav>
+        <a
+          href="https://camilagonzalez.ar/"
+          target="_blank"
+          rel="noreferrer"
+          className="logo"
+        >
+          Camila Gonzalez
+        </a>
+      </nav>
+      <h1 className="text-center">PRESUPUESTADOR</h1>
       <div className="row mt-5">
         <div className="col-xs-12 col-sm-6 col-md-5 elegir-fecha">
-          <h4>Elegir fecha: </h4>
-          <div className="calendar-container">
-            <Calendar onChange={setDate} value={date} locale={"es-ES"} />
+          <div className="fecha">
+            <h5>*Elegir fecha: </h5>
+            <div className="calendar-container">
+              <Calendar onChange={setDate} value={date} locale={"es-ES"} />
+            </div>
+            <p className="mt-3">
+              <span className="bold">Fecha elegida: </span>
+              <b>{fechaElegida}</b>
+            </p>
           </div>
-          <p>
-            <span className="bold">Fecha elegida: </span>
-            {fechaElegida}
-          </p>
         </div>
         <div className="col-xs-12 col-sm-6 col-md-7">
-          <div className="mb-3">
-            <h4>Servicio/s: </h4>
+          <div className="mb-4 servicios">
+            <h5>*Servicio/s: </h5>
             <Select
               options={servicios}
               isMulti
@@ -189,8 +200,8 @@ function App() {
               para mas detalles.)
             </p>
           </div>
-          <div className="mb-3">
-            <h4>¿En cuántas cuotas?</h4>
+          <div className="mb-4 cuotas">
+            <h5>*¿En cuántas cuotas?</h5>
             <Select
               options={cuotas}
               // defaultValue={cuotas[0]}
@@ -199,11 +210,12 @@ function App() {
               placeholder="Seleccionar la cantidad de cuotas"
             />
           </div>
-          <div className="mb-3">
-            <h4>¿Querés hacer un adelanto? (opcional)</h4>
+          <div className="mb-4 adelanto">
+            <h5>¿Querés hacer un adelanto? (opcional)</h5>
             <Select
               options={entregas}
               // defaultValue={entregas[0]}
+
               onChange={handleEntrega}
               isDisabled={isDisabled || servicio.length < 1}
               placeholder="Seleccionar el monto de adelanto"
@@ -215,19 +227,21 @@ function App() {
             </div>
           ) : (
             <div className="pt-5 mb-3 precio-total">
-              <h3>
-                Precio TOTAL: $
-                {precio ? new Intl.NumberFormat("de-DE").format(precio) : "0"}
-              </h3>
+              <h4>
+                <b>
+                  Precio TOTAL: $
+                  {precio ? new Intl.NumberFormat("de-DE").format(precio) : "0"}
+                </b>
+              </h4>
 
-              <h3>
+              <h4>
                 ({cuotaValue}
                 {cuotaValue === 1 ? " pago de $" : "x cuotas de $"}
                 {precioCuota
                   ? new Intl.NumberFormat("de-DE").format(precioCuota)
                   : "0"}
                 )
-              </h3>
+              </h4>
             </div>
           )}
         </div>
