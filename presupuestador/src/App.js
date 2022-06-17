@@ -46,7 +46,13 @@ function App() {
   ];
 
   if (diferenciaMeses < cuota.value && cuota.value !== 1) {
-    swal("Las cuotas deben finalizar antes de la fecha elegida.");
+    // swal(
+    //   "Las cuotas deben finalizar antes de la fecha elegida. (Cambia la fecha o la cantidad cuotas)"
+    // );
+    swal(
+      "Las cuotas deben finalizar antes de la fecha elegida.",
+      "(Cambia la fecha o la cantidad cuotas)"
+    );
     setCuota(1);
   }
 
@@ -195,7 +201,7 @@ function App() {
                 target="_blank"
                 rel="noreferrer"
               >
-                https://camilagonzalez.ar/
+                www.camilagonzalez.ar
               </a>{" "}
               para mas detalles.)
             </p>
