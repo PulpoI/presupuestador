@@ -1,48 +1,49 @@
 import React, { useState } from "react";
 import Select from "react-select";
-
 const servicios = [
   { value: "book15clascio", label: "Book de 15 (Clásico)", price: 13900 },
   { value: "book15dorado", label: "Book de 15 (Dorado)", price: 17900 },
-  { value: "fiesta15", label: "Fiesta de 15", price: 17000 },
-];
-
-const cuotas = [
-  { value: 3, label: "3x (sin interés)", porcentaje: 0 },
-  { value: 6, label: "6x (sin interés)", porcentaje: 0 },
-  { value: 9, label: "9x", porcentaje: 30 },
-  { value: 12, label: "12x", porcentaje: 50 },
-  { value: 18, label: "18x", porcentaje: 75 },
-  { value: 24, label: "24x", porcentaje: 100 },
-  { value: 30, label: "30x", porcentaje: 125 },
-  { value: 36, label: "36x", porcentaje: 150 },
+  { value: "fiesta15", label: "Fiesta de 15 (Completa)", price: 17000 },
+  { value: "fiesta3hs", label: "Fiesta/Reunión (3 hs)", price: 7000 },
+  { value: "fiesta5hs", label: "Fiesta/Reunión (5 hs)", price: 10000 },
+  {
+    value: "sesionInfExpress",
+    label: "Sesión infantil (Express)",
+    price: 4800,
+  },
+  {
+    value: "sesionInfClasico",
+    label: "Sesión infantil (Clásico)",
+    price: 5800,
+  },
+  {
+    value: "sesionInfMagico",
+    label: "Sesión infantil (Mágico)",
+    price: 7800,
+  },
 ];
 
 const Options = () => {
-  const [servicio, setServicio] = useState([]);
-  const [cuota, setCuota] = useState(1);
+  const [change, setChange] = useState("");
 
-  const handleService = (e) => {
-    setServicio(e);
-  };
-
-  const handleCuota = (e) => {
-    setCuota(e);
-  };
-  console.log(servicio.map((item) => item.price));
-  //sumar los precios de los items servicio
-  const total = servicio.map((item) => item.price).reduce((a, b) => a + b, 0);
-  console.log(total);
-
-  //calcular el total con el porcentaje de la cuota
-  const totalConCuota = total + (total * cuota.porcentaje) / 100;
-  console.log(Math.round(totalConCuota / cuota.value));
+  function handleChange(e) {
+    setChange(e.target.value);
+  }
 
   return (
     <>
-      <Select options={servicios} isMulti onChange={handleService} />
-      <h2>Elegir CUOTAS</h2>
-      <Select options={cuotas} onChange={handleCuota} />
+      <form>
+        <label>
+          <select multiple={true} value={change} onChange={handleChange}>
+            {servicios.map((servicio) => (
+              <option key={servicio.value} value={servicio.value}>
+                {servicio.label}
+              </option>
+            ))}
+          </select>
+          <div>{change}</div>
+        </label>
+      </form>
     </>
   );
 };

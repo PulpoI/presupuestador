@@ -5,6 +5,7 @@ import "react-calendar/dist/Calendar.css";
 import Select from "react-select";
 import swal from "sweetalert";
 import "./css/bootstrap.min.css";
+import Options from "./components/Options";
 
 function App() {
   const [date, setDate] = useState(new Date());
@@ -18,7 +19,24 @@ function App() {
   const servicios = [
     { value: "book15clascio", label: "Book de 15 (Clásico)", price: 13900 },
     { value: "book15dorado", label: "Book de 15 (Dorado)", price: 17900 },
-    { value: "fiesta15", label: "Fiesta de 15", price: 17000 },
+    { value: "fiesta15", label: "Fiesta de 15 (Completa)", price: 17000 },
+    { value: "fiesta3hs", label: "Fiesta/Reunión (3 hs)", price: 7000 },
+    { value: "fiesta5hs", label: "Fiesta/Reunión (5 hs)", price: 10000 },
+    {
+      value: "sesionInfExpress",
+      label: "Sesión infantil (Express)",
+      price: 4800,
+    },
+    {
+      value: "sesionInfClasico",
+      label: "Sesión infantil (Clásico)",
+      price: 5800,
+    },
+    {
+      value: "sesionInfMagico",
+      label: "Sesión infantil (Mágico)",
+      price: 7800,
+    },
   ];
 
   const cuotas = [
@@ -34,7 +52,7 @@ function App() {
   ];
 
   const entregas = [
-    { value: 0, label: "Sin entrega" },
+    { value: 0, label: "Sin adelanto" },
     { value: 3000, label: "$3.000" },
     { value: 4000, label: "$4.000" },
     { value: 5000, label: "$5.000" },
@@ -71,6 +89,7 @@ function App() {
 
   function handleCuota(e) {
     setCuota(e);
+    setEntrega(0);
   }
 
   useEffect(() => {
@@ -150,18 +169,30 @@ function App() {
   }, [date]);
 
   const handleEntrega = (e) => {
+    console.log(e.value);
+    console.log(servicio.map((e) => e.price));
+    if (e.value > servicio.map((e) => e.price)) {
+      swal(
+        "El monto del adelanto no puede ser mayor al total",
+        "Cambia el monto del adelanto"
+      );
+      setEntrega(e);
+      setPrecio(0);
+      setCuota(1);
+    }
     setEntrega(e);
   };
-
+  console.log(cuota);
   useEffect(() => {
     if (servicio.length > 0) {
       setPrecio(totalConCuota);
     }
   }, [servicio, cuota, totalConCuota]);
+  console.log(entregaValue);
 
   return (
     <div className="container-xl mt-3">
-      <nav>
+      <nav className="text-center">
         <a
           href="https://camilagonzalez.ar/"
           target="_blank"
@@ -221,7 +252,6 @@ function App() {
             <Select
               options={entregas}
               // defaultValue={entregas[0]}
-
               onChange={handleEntrega}
               isDisabled={isDisabled || servicio.length < 1}
               placeholder="Seleccionar el monto de adelanto"
@@ -241,12 +271,16 @@ function App() {
               </h4>
 
               <h4>
-                ({cuotaValue}
+                {cuotaValue}
                 {cuotaValue === 1 ? " pago de $" : "x cuotas de $"}
                 {precioCuota
                   ? new Intl.NumberFormat("de-DE").format(precioCuota)
                   : "0"}
-                )
+                {entregaValue > 1
+                  ? " ($" +
+                    new Intl.NumberFormat("de-DE").format(entregaValue) +
+                    " de adelanto)"
+                  : ""}
               </h4>
             </div>
           )}
