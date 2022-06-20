@@ -84,12 +84,12 @@ function App() {
       setIsDisabled(true);
       setPrecio(0);
       setCuota(1);
+      setEntrega(0);
     }
   };
 
   function handleCuota(e) {
     setCuota(e);
-    setEntrega(0);
   }
 
   useEffect(() => {
@@ -169,8 +169,6 @@ function App() {
   }, [date]);
 
   const handleEntrega = (e) => {
-    console.log(e.value);
-    console.log(servicio.map((e) => e.price));
     if (e.value > servicio.map((e) => e.price)) {
       swal(
         "El monto del adelanto no puede ser mayor al total",
@@ -182,13 +180,12 @@ function App() {
     }
     setEntrega(e);
   };
-  console.log(cuota);
+
   useEffect(() => {
     if (servicio.length > 0) {
       setPrecio(totalConCuota);
     }
   }, [servicio, cuota, totalConCuota]);
-  console.log(entregaValue);
 
   return (
     <div className="container-xl mt-3">
@@ -242,6 +239,7 @@ function App() {
             <Select
               options={cuotas}
               // defaultValue={cuotas[0]}
+              value={cuota}
               onChange={handleCuota}
               isDisabled={isDisabled}
               placeholder="Seleccionar la cantidad de cuotas"
@@ -253,6 +251,7 @@ function App() {
               options={entregas}
               // defaultValue={entregas[0]}
               onChange={handleEntrega}
+              value={entrega}
               isDisabled={isDisabled || servicio.length < 1}
               placeholder="Seleccionar el monto de adelanto"
             ></Select>
@@ -271,16 +270,26 @@ function App() {
               </h4>
 
               <h4>
-                {cuotaValue}
-                {cuotaValue === 1 ? " pago de $" : "x cuotas de $"}
-                {precioCuota
-                  ? new Intl.NumberFormat("de-DE").format(precioCuota)
-                  : "0"}
-                {entregaValue > 1
-                  ? " ($" +
-                    new Intl.NumberFormat("de-DE").format(entregaValue) +
-                    " de adelanto)"
-                  : ""}
+                {precioCuota > 0 ? (
+                  <>
+                    {cuotaValue}
+                    {cuotaValue === 1 ? " pago de $" : "x cuotas de $"}
+                    {precioCuota
+                      ? new Intl.NumberFormat("de-DE").format(precioCuota)
+                      : "0"}
+                    {entregaValue > 1
+                      ? " ($" +
+                        new Intl.NumberFormat("de-DE").format(entregaValue) +
+                        " de adelanto)"
+                      : ""}
+                  </>
+                ) : (
+                  <>
+                    {" ($" +
+                      new Intl.NumberFormat("de-DE").format(entregaValue) +
+                      " de adelanto)"}
+                  </>
+                )}
               </h4>
             </div>
           )}
