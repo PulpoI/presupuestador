@@ -5,7 +5,6 @@ import "react-calendar/dist/Calendar.css";
 import Select from "react-select";
 import swal from "sweetalert";
 import "./css/bootstrap.min.css";
-import Options from "./components/Options";
 
 function App() {
   const [date, setDate] = useState(new Date());
@@ -63,65 +62,6 @@ function App() {
     { value: 10000, label: "$10.000" },
   ];
 
-  if (diferenciaMeses < cuota.value && cuota.value !== 1) {
-    // swal(
-    //   "Las cuotas deben finalizar antes de la fecha elegida. (Cambia la fecha o la cantidad cuotas)"
-    // );
-    swal(
-      "Las cuotas deben finalizar antes de la fecha elegida.",
-      "(Cambia la fecha o la cantidad cuotas)"
-    );
-    setCuota(1);
-  }
-
-  // seleccionar servicio/s
-  const handleService = (e) => {
-    setServicio(e);
-    if (e.length > 0) {
-      setIsDisabled(false);
-      setPrecio(totalConCuota);
-    } else {
-      setIsDisabled(true);
-      setPrecio(0);
-      setCuota(1);
-      setEntrega(0);
-    }
-  };
-
-  function handleCuota(e) {
-    setCuota(e);
-  }
-
-  useEffect(() => {
-    if (servicio.length < 1) {
-      handleCuota(1);
-    }
-  }, [servicio, cuota]);
-
-  let cuotaValue = cuota.value;
-  let entregaValue = entrega.value;
-  let cuotaPorcentaje = cuota.porcentaje;
-
-  if (cuotaPorcentaje === undefined) {
-    cuotaPorcentaje = 1;
-  }
-
-  if (entregaValue === undefined) {
-    entregaValue = 0;
-  }
-  if (cuotaValue === undefined) {
-    cuotaValue = 1;
-  }
-
-  //sumar los precios de los items servicio
-  const total = servicio.map((item) => item.price).reduce((a, b) => a + b, 0);
-  //calcular el total con el porcentaje de la cuota
-  const totalConEntrega = total - entregaValue;
-
-  const totalConCuota = total + (totalConEntrega * cuota.porcentaje) / 100;
-
-  const precioCuota = Math.round((totalConCuota - entregaValue) / cuotaValue);
-
   // Creamos array con los meses del año
   const meses = [
     "enero",
@@ -157,6 +97,64 @@ function App() {
     " de " +
     date.getUTCFullYear();
 
+  // alert(date);
+  if (diferenciaMeses < cuota.value && cuota.value !== 1) {
+    swal(
+      "Las cuotas deben finalizar antes de la fecha elegida.",
+      "(Cambia la fecha o la cantidad cuotas)"
+    );
+    setCuota(1);
+  }
+
+  let cuotaValue = cuota.value;
+  let entregaValue = entrega.value;
+  let cuotaPorcentaje = cuota.porcentaje;
+
+  if (cuotaPorcentaje === undefined) {
+    cuotaPorcentaje = 0;
+  }
+  if (entregaValue === undefined) {
+    entregaValue = 0;
+  }
+  if (cuotaValue === undefined) {
+    cuotaValue = 1;
+  }
+
+  //sumar los precios de los items servicio
+  const total = servicio.map((item) => item.price).reduce((a, b) => a + b, 0);
+  //calcular el total con el porcentaje de la cuota
+  const totalConEntrega = total - entregaValue;
+  const totalConCuota = total + (totalConEntrega * cuotaPorcentaje) / 100;
+  const precioCuota = Math.round((totalConCuota - entregaValue) / cuotaValue);
+
+  // select servicio
+  const handleService = (e) => {
+    if (e.length > 0) {
+      setIsDisabled(false);
+      setPrecio(totalConEntrega);
+      setCuota(1);
+    } else {
+      setIsDisabled(true);
+      setPrecio(0);
+      setCuota(1);
+      setEntrega(0);
+    }
+    setServicio(e);
+  };
+
+  function handleCuota(e) {
+    setCuota(e);
+  }
+
+  // console.log("precio", precio);
+  // console.log("cuota", cuota);
+
+  // console.log("totalConCuota", totalConCuota);
+  // console.log("precioCuota", precioCuota);
+  // console.log("totalConEntrega", totalConEntrega);
+  // console.log("cuotaPorcentaje", cuotaPorcentaje);
+  // console.log("entregaValue", entregaValue);
+
   useEffect(() => {
     function monthDiff(d1, d2) {
       var months;
@@ -174,7 +172,7 @@ function App() {
         "El monto del adelanto no puede ser mayor al total",
         "Cambia el monto del adelanto"
       );
-      setEntrega(e);
+      setEntrega(0);
       setPrecio(0);
       setCuota(1);
     }
@@ -188,114 +186,119 @@ function App() {
   }, [servicio, cuota, totalConCuota]);
 
   return (
-    <div className="container-xl mt-3">
-      <nav className="text-center">
-        <a
-          href="https://camilagonzalez.ar/"
-          target="_blank"
-          rel="noreferrer"
-          className="logo"
-        >
-          Camila Gonzalez
-        </a>
-      </nav>
-      <h1 className="text-center">PRESUPUESTADOR</h1>
-      <div className="row mt-5">
-        <div className="col-xs-12 col-sm-6 col-md-5 elegir-fecha">
-          <div className="fecha">
-            <h5>*Elegir fecha: </h5>
-            <div className="calendar-container">
-              <Calendar onChange={setDate} value={date} locale={"es-ES"} />
+    <>
+      <div className="container-div"></div>
+      <div className="container-xl mt-3 ">
+        <nav className="text-center">
+          <a
+            href="https://camilagonzalez.ar/"
+            target="_blank"
+            rel="noreferrer"
+            className="logo"
+          >
+            Camila Gonzalez
+          </a>
+        </nav>
+        <h1 className="text-center">PRESUPUESTADOR</h1>
+        <div className="row mt-5">
+          <div className="col-xs-12 col-sm-6 col-md-5 elegir-fecha">
+            <div className="fecha">
+              <h5>*Elegir fecha: </h5>
+              <div className="calendar-container">
+                <Calendar onChange={setDate} value={date} locale={"es-ES"} />
+              </div>
+              <p className="mt-3">
+                <span className="bold">Fecha elegida: </span>
+                <b>{fechaElegida}</b>
+              </p>
             </div>
-            <p className="mt-3">
-              <span className="bold">Fecha elegida: </span>
-              <b>{fechaElegida}</b>
-            </p>
           </div>
-        </div>
-        <div className="col-xs-12 col-sm-6 col-md-7">
-          <div className="mb-4 servicios">
-            <h5>*Servicio/s: </h5>
-            <Select
-              options={servicios}
-              isMulti
-              onChange={handleService}
-              placeholder="Seleccionar el servicio. (Puede ser más de uno)"
-            />
-            <p>
-              (Visita{" "}
-              <a
-                href="https://camilagonzalez.ar/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                www.camilagonzalez.ar
-              </a>{" "}
-              para mas detalles.)
-            </p>
-          </div>
-          <div className="mb-4 cuotas">
-            <h5>*¿En cuántas cuotas?</h5>
-            <Select
-              options={cuotas}
-              // defaultValue={cuotas[0]}
-              value={cuota}
-              onChange={handleCuota}
-              isDisabled={isDisabled}
-              placeholder="Seleccionar la cantidad de cuotas"
-            />
-          </div>
-          <div className="mb-4 adelanto">
-            <h5>¿Querés hacer un adelanto? (opcional)</h5>
-            <Select
-              options={entregas}
-              // defaultValue={entregas[0]}
-              onChange={handleEntrega}
-              value={entrega}
-              isDisabled={isDisabled || servicio.length < 1}
-              placeholder="Seleccionar el monto de adelanto"
-            ></Select>
-          </div>
-          {(cuota < 0.5) | (servicio.length === 0) ? (
-            <div className="pt-5 mb-3 precio-total">
-              <h3>Seleccionar fecha, servicio/s y cuota/s.</h3>
+          <div className="col-xs-12 col-sm-6 col-md-7">
+            <div className="mb-4 servicios">
+              <h5>*Servicio/s: </h5>
+              <Select
+                options={servicios}
+                isMulti
+                onChange={handleService}
+                placeholder="Seleccionar el servicio. (Puede ser más de uno)"
+              />
+              <p>
+                (Visita{" "}
+                <a
+                  href="https://camilagonzalez.ar/"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  www.camilagonzalez.ar
+                </a>{" "}
+                para mas detalles.)
+              </p>
             </div>
-          ) : (
-            <div className="pt-5 mb-3 precio-total">
-              <h4>
-                <b>
-                  Precio TOTAL: $
-                  {precio ? new Intl.NumberFormat("de-DE").format(precio) : "0"}
-                </b>
-              </h4>
-
-              <h4>
-                {precioCuota > 0 ? (
-                  <>
-                    {cuotaValue}
-                    {cuotaValue === 1 ? " pago de $" : "x cuotas de $"}
-                    {precioCuota
-                      ? new Intl.NumberFormat("de-DE").format(precioCuota)
+            <div className="mb-4 cuotas">
+              <h5>*¿En cuántas cuotas?</h5>
+              <Select
+                options={cuotas}
+                // defaultValue={cuotas[0]}
+                value={cuota}
+                onChange={handleCuota}
+                isDisabled={isDisabled}
+                placeholder="Seleccionar la cantidad de cuotas"
+              />
+            </div>
+            <div className="mb-4 adelanto">
+              <h5>¿Querés hacer un adelanto? (opcional)</h5>
+              <Select
+                options={entregas}
+                // defaultValue={entregas[0]}
+                onChange={handleEntrega}
+                value={entrega}
+                isDisabled={isDisabled || servicio.length < 1}
+                placeholder="Seleccionar el monto de adelanto"
+              ></Select>
+            </div>
+            {(cuota < 0.5) | (servicio.length === 0) ? (
+              <div className="pt-5 mb-3 precio-total">
+                <h3>Seleccionar fecha, servicio/s y cuota/s.</h3>
+              </div>
+            ) : (
+              <div className="pt-5 mb-3 precio-total">
+                <h4>
+                  <b>
+                    Precio total: $
+                    {precio
+                      ? new Intl.NumberFormat("de-DE").format(precio)
                       : "0"}
-                    {entregaValue > 1
-                      ? " ($" +
+                  </b>
+                </h4>
+
+                <h4>
+                  {precioCuota > 0 ? (
+                    <>
+                      {cuotaValue}
+                      {cuotaValue === 1 ? " pago de $" : "x cuotas de $"}
+                      {precioCuota
+                        ? new Intl.NumberFormat("de-DE").format(precioCuota)
+                        : "0"}
+                      {entregaValue > 1
+                        ? " ($" +
+                          new Intl.NumberFormat("de-DE").format(entregaValue) +
+                          " de adelanto)"
+                        : ""}
+                    </>
+                  ) : (
+                    <>
+                      {" ($" +
                         new Intl.NumberFormat("de-DE").format(entregaValue) +
-                        " de adelanto)"
-                      : ""}
-                  </>
-                ) : (
-                  <>
-                    {" ($" +
-                      new Intl.NumberFormat("de-DE").format(entregaValue) +
-                      " de adelanto)"}
-                  </>
-                )}
-              </h4>
-            </div>
-          )}
+                        " de adelanto)"}
+                    </>
+                  )}
+                </h4>
+              </div>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

@@ -23,6 +23,7 @@ body{
   font-family: 'Raleway', sans-serif !important;
   background-image: url(../src/assets/image-light-2.webp);
   color: #594F57 !important;
+
 }
 div{
   font-family: 'Raleway', sans-serif !important;
@@ -50,6 +51,18 @@ h3, h4{
   background-color: #594F57 !important;
   color: #fff !important;
 }
+/* .container-div{
+  background-image: url(../src/assets/image-light-2.webp);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+
+  mix-blend-mode: overlay;
+
+} */
 
 /* styles reac calendar */
 .react-calendar { 
