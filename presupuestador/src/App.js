@@ -132,7 +132,6 @@ function App() {
     if (e.length > 0) {
       setIsDisabled(false);
       setPrecio(totalConEntrega);
-      setCuota(1);
     } else {
       setIsDisabled(true);
       setPrecio(0);
@@ -145,15 +144,6 @@ function App() {
   function handleCuota(e) {
     setCuota(e);
   }
-
-  // console.log("precio", precio);
-  // console.log("cuota", cuota);
-
-  // console.log("totalConCuota", totalConCuota);
-  // console.log("precioCuota", precioCuota);
-  // console.log("totalConEntrega", totalConEntrega);
-  // console.log("cuotaPorcentaje", cuotaPorcentaje);
-  // console.log("entregaValue", entregaValue);
 
   useEffect(() => {
     function monthDiff(d1, d2) {
