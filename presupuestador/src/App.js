@@ -1,20 +1,32 @@
-import "./App.css";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+//librarys
 import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
 import Select from "react-select";
+//react-router-dom
+import { PresupuestoContext } from "./components/PresupuestoContext";
+import { Link } from "react-router-dom";
+//styles components
+import "react-calendar/dist/Calendar.css";
 import swal from "sweetalert";
 import "./css/bootstrap.min.css";
+import "./App.css";
 
 function App() {
+  //states
   const [date, setDate] = useState(new Date());
   const [diferenciaMeses, setDiferenciaMeses] = useState();
   const [servicio, setServicio] = useState([]);
   const [cuota, setCuota] = useState(0);
-  const [isDisabled, setIsDisabled] = useState(true);
   const [precio, setPrecio] = useState(0);
   const [entrega, setEntrega] = useState(0);
+  const [presupuestoActual, setPresupuestoActual] = useState([]);
+  const [isDisabled, setIsDisabled] = useState(true);
+  //context
+  const { setPresupuesto } = useContext(PresupuestoContext);
 
+  //date
+
+  //dates of services
   const servicios = [
     { value: "book15clascio", label: "Book de 15 (Clásico)", price: 13900 },
     { value: "book15dorado", label: "Book de 15 (Dorado)", price: 17900 },
@@ -37,7 +49,6 @@ function App() {
       price: 7800,
     },
   ];
-
   const cuotas = [
     { value: 1, label: "1x", porcentaje: 0 },
     { value: 3, label: "3x (sin interés)", porcentaje: 0 },
@@ -49,7 +60,6 @@ function App() {
     { value: 30, label: "30x", porcentaje: 125 },
     { value: 36, label: "36x", porcentaje: 150 },
   ];
-
   const entregas = [
     { value: 0, label: "Sin adelanto" },
     { value: 3000, label: "$3.000" },
@@ -61,8 +71,6 @@ function App() {
     { value: 9000, label: "$9.000" },
     { value: 10000, label: "$10.000" },
   ];
-
-  // Creamos array con los meses del año
   const meses = [
     "enero",
     "febrero",
@@ -77,7 +85,7 @@ function App() {
     "noviembre",
     "diciembre",
   ];
-  // Creamos array con los días de la semana
+  //date days
   const dias_semana = [
     "Domingo",
     "Lunes",
@@ -87,7 +95,6 @@ function App() {
     "Viernes",
     "Sábado",
   ];
-  // Construimos el formato de salida
   const fechaElegida =
     dias_semana[date.getDay()] +
     ", " +
@@ -97,19 +104,10 @@ function App() {
     " de " +
     date.getUTCFullYear();
 
-  // alert(date);
-  if (diferenciaMeses < cuota.value && cuota.value !== 1) {
-    swal(
-      "Las cuotas deben finalizar antes de la fecha elegida.",
-      "(Cambia la fecha o la cantidad cuotas)"
-    );
-    setCuota(1);
-  }
-
+  //price of the service
   let cuotaValue = cuota.value;
   let entregaValue = entrega.value;
   let cuotaPorcentaje = cuota.porcentaje;
-
   if (cuotaPorcentaje === undefined) {
     cuotaPorcentaje = 0;
   }
@@ -119,15 +117,23 @@ function App() {
   if (cuotaValue === undefined) {
     cuotaValue = 1;
   }
-
-  //sumar los precios de los items servicio
   const total = servicio.map((item) => item.price).reduce((a, b) => a + b, 0);
-  //calcular el total con el porcentaje de la cuota
   const totalConEntrega = total - entregaValue;
   const totalConCuota = total + (totalConEntrega * cuotaPorcentaje) / 100;
   const precioCuota = Math.round((totalConCuota - entregaValue) / cuotaValue);
 
-  // select servicio
+  // functions
+
+  // swal alert functions
+  if (diferenciaMeses < cuota.value && cuota.value !== 1) {
+    swal(
+      "Las cuotas deben finalizar antes de la fecha elegida.",
+      "(Cambia la fecha o la cantidad cuotas)"
+    );
+    setCuota(1);
+  }
+
+  // select services
   const handleService = (e) => {
     if (e.length > 0) {
       setIsDisabled(false);
@@ -141,10 +147,12 @@ function App() {
     setServicio(e);
   };
 
+  // select shares
   function handleCuota(e) {
     setCuota(e);
   }
 
+  // select advance money
   useEffect(() => {
     function monthDiff(d1, d2) {
       var months;
@@ -156,6 +164,7 @@ function App() {
     setDiferenciaMeses(monthDiff(new Date(), new Date(date)));
   }, [date]);
 
+  // select delivery
   const handleEntrega = (e) => {
     if (e.value > servicio.map((e) => e.price)) {
       swal(
@@ -169,15 +178,52 @@ function App() {
     setEntrega(e);
   };
 
+  // select useEffects
+
+  // setPrecio
   useEffect(() => {
     if (servicio.length > 0) {
       setPrecio(totalConCuota);
     }
   }, [servicio, cuota, totalConCuota]);
 
+  // data of the form
+  useEffect(() => {
+    let presupuesto = [
+      {
+        fecha: fechaElegida,
+        servicio: servicio,
+        cuota: cuota,
+        entrega: entrega,
+        precio: precio,
+        totalConCuota: totalConCuota,
+        totalConEntrega: totalConEntrega,
+        precioCuota: precioCuota,
+        cuotaValue: cuotaValue,
+        entregaValue: entregaValue,
+      },
+    ];
+    setPresupuestoActual(presupuesto);
+  }, [
+    servicio,
+    cuota,
+    entrega,
+    fechaElegida,
+    precio,
+    totalConCuota,
+    totalConEntrega,
+    precioCuota,
+    cuotaValue,
+    entregaValue,
+  ]);
+
+  // setPresupuestoActual
+  const onAdd = () => {
+    setPresupuesto(...presupuestoActual);
+  };
+
   return (
     <>
-      <div className="container-div"></div>
       <div className="container-xl mt-3 ">
         <nav className="text-center">
           <a
@@ -190,7 +236,7 @@ function App() {
           </a>
         </nav>
         <h1 className="text-center">PRESUPUESTADOR</h1>
-        <div className="row mt-5">
+        <div className="row mt-4">
           <div className="col-xs-12 col-sm-6 col-md-5 elegir-fecha">
             <div className="fecha">
               <h5>*Elegir fecha: </h5>
@@ -212,7 +258,7 @@ function App() {
                 onChange={handleService}
                 placeholder="Seleccionar el servicio. (Puede ser más de uno)"
               />
-              <p>
+              <p className="servicios-texto">
                 (Visita{" "}
                 <a
                   href="https://camilagonzalez.ar/"
@@ -251,7 +297,7 @@ function App() {
                 <h3>Seleccionar fecha, servicio/s y cuota/s.</h3>
               </div>
             ) : (
-              <div className="pt-5 mb-3 precio-total">
+              <div className="pt-4 mb-3 precio-total">
                 <h4>
                   <b>
                     Precio total: $
@@ -285,6 +331,11 @@ function App() {
                 </h4>
               </div>
             )}
+            <Link to="/form">
+              <button onClick={onAdd} className="btn btn-primary">
+                <b>Enviar presupuesto</b>
+              </button>
+            </Link>
           </div>
         </div>
       </div>

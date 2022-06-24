@@ -1,0 +1,21 @@
+input{
+  cursor: pointer;
+}
+
+label{
+  cursor: pointer;
+}
+
+.formGroupRadios{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.formGroupRadios > .form-group{
+  padding-left: 15px;
+}
+
+.form-check-label{
+  padding-left: 3px;
+}

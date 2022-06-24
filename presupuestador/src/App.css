@@ -23,7 +23,7 @@ body{
   font-family: 'Raleway', sans-serif !important;
   background-image: url(../src/assets/image-light-2.webp);
   color: #594F57 !important;
-
+  height: 95vh;
 }
 div{
   font-family: 'Raleway', sans-serif !important;
@@ -51,6 +51,15 @@ h3, h4{
   background-color: #594F57 !important;
   color: #fff !important;
 }
+
+.servicios-texto{
+  margin: 0;
+}
+.react-calendar{
+  border: initial !important;
+  width: 90% !important;
+}
+
 /* .container-div{
   background-image: url(../src/assets/image-light-2.webp);
   position: absolute;
@@ -63,6 +72,9 @@ h3, h4{
   mix-blend-mode: overlay;
 
 } */
+
+
+
 
 /* styles reac calendar */
 .react-calendar { 
@@ -161,11 +173,16 @@ h3, h4{
      text-align: center!important;
      margin-bottom: 1rem !important;
    }
+   .react-calendar{
+     border: initial !important;
+     width: 100% !important;
+   }
 
     .servicios, .cuotas, .adelanto{
      margin-top:2rem;
      background-color: #bf71542a ;
      padding: 1rem;
+     border-radius: 8px;
    }
   .precio-total {
     position: initial !important;
