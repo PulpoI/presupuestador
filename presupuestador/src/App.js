@@ -16,7 +16,7 @@ function App() {
   const [date, setDate] = useState(new Date());
   const [diferenciaMeses, setDiferenciaMeses] = useState();
   const [servicio, setServicio] = useState([]);
-  const [cuota, setCuota] = useState(0);
+  const [cuota, setCuota] = useState(1);
   const [precio, setPrecio] = useState(0);
   const [entrega, setEntrega] = useState(0);
   const [presupuestoActual, setPresupuestoActual] = useState([]);
@@ -49,17 +49,20 @@ function App() {
       price: 7800,
     },
   ];
+  // date dues
   const cuotas = [
     { value: 1, label: "1x", porcentaje: 0 },
     { value: 3, label: "3x (sin interés)", porcentaje: 0 },
     { value: 6, label: "6x (sin interés)", porcentaje: 0 },
     { value: 9, label: "9x", porcentaje: 25 },
     { value: 12, label: "12x", porcentaje: 50 },
+    { value: 15, label: "15x", porcentaje: 63 },
     { value: 18, label: "18x", porcentaje: 75 },
     { value: 24, label: "24x", porcentaje: 100 },
     { value: 30, label: "30x", porcentaje: 125 },
     { value: 36, label: "36x", porcentaje: 150 },
   ];
+  //date advancement
   const entregas = [
     { value: 0, label: "Sin adelanto" },
     { value: 3000, label: "$3.000" },
@@ -71,6 +74,7 @@ function App() {
     { value: 9000, label: "$9.000" },
     { value: 10000, label: "$10.000" },
   ];
+  //date months
   const meses = [
     "enero",
     "febrero",
@@ -95,6 +99,8 @@ function App() {
     "Viernes",
     "Sábado",
   ];
+
+  //chosen date text
   const fechaElegida =
     dias_semana[date.getDay()] +
     ", " +
@@ -124,7 +130,7 @@ function App() {
 
   // functions
 
-  // swal alert functions
+  //swal alert functions
   if (diferenciaMeses < cuota.value && cuota.value !== 1) {
     swal(
       "Las cuotas deben finalizar antes de la fecha elegida.",
@@ -133,7 +139,7 @@ function App() {
     setCuota(1);
   }
 
-  // select services
+  //select services
   const handleService = (e) => {
     if (e.length > 0) {
       setIsDisabled(false);
@@ -147,12 +153,12 @@ function App() {
     setServicio(e);
   };
 
-  // select shares
+  //select shares
   function handleCuota(e) {
     setCuota(e);
   }
 
-  // select advance money
+  //select advance money
   useEffect(() => {
     function monthDiff(d1, d2) {
       var months;
@@ -164,7 +170,7 @@ function App() {
     setDiferenciaMeses(monthDiff(new Date(), new Date(date)));
   }, [date]);
 
-  // select delivery
+  //select delivery
   const handleEntrega = (e) => {
     if (e.value > servicio.map((e) => e.price)) {
       swal(
@@ -180,14 +186,14 @@ function App() {
 
   // select useEffects
 
-  // setPrecio
+  //setPrecio
   useEffect(() => {
     if (servicio.length > 0) {
       setPrecio(totalConCuota);
     }
   }, [servicio, cuota, totalConCuota]);
 
-  // data of the form
+  //array of budget
   useEffect(() => {
     let presupuesto = [
       {
@@ -217,7 +223,7 @@ function App() {
     entregaValue,
   ]);
 
-  // setPresupuestoActual
+  //setPresupuestoActual
   const onAdd = () => {
     setPresupuesto(...presupuestoActual);
   };
@@ -333,7 +339,7 @@ function App() {
             )}
             <Link to="/form">
               <button onClick={onAdd} className="btn btn-primary">
-                <b>Enviar presupuesto</b>
+                <b>Ver presupuesto</b>
               </button>
             </Link>
           </div>

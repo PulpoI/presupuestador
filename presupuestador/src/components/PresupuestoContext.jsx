@@ -8,22 +8,31 @@ const PresupuestoProvider = ({ children }) => {
   console.log(presupuesto);
 
   //Guardando el presupuesto en el LS
-  function addLocalStorage() {
-    localStorage.setItem("presupuesto", JSON.stringify(presupuesto));
-  }
+  // function addLocalStorage() {
+  //   localStorage.setItem("presupuesto", JSON.stringify(presupuesto));
+  // }
 
-  useEffect(() => {
-    addLocalStorage();
-  }, [presupuesto]);
+  // function addToLocalStorage() {
+  //   addLocalStorage();
+  // }
 
-  // window.onload = function () {
-  //   const presu = JSON.parse(localStorage.getItem("presupuesto"));
-  //   // if (presupuesto) {
-  //   setPresupuesto(presu);
-  //   console.log(presu);
+  //Recuperando el presupuesto del LS
+  // function getLocalStorage() {
+  //   const presupuestoLS = localStorage.getItem("presupuesto");
+  //   if (presupuestoLS) {
+  //     setPresupuesto(JSON.parse(presupuestoLS));
+  //   }
+  // }
 
-  //   // }
-  // };
+  // if (presupuesto.length == 0) {
+  //   window.onload = function () {
+  //     const presu = JSON.parse(localStorage.getItem("presupuesto"));
+  //     setPresupuesto(presu);
+  //     console.log(presu);
+  //   };
+  // } else {
+  //   addToLocalStorage();
+  // }
 
   // function limpiarLs() {
   //   addLocalStorage(presupuesto);
@@ -32,7 +41,12 @@ const PresupuestoProvider = ({ children }) => {
 
   return (
     <PresupuestoContext.Provider
-      value={{ presupuesto, setPresupuesto, addLocalStorage }}
+      value={{
+        presupuesto,
+        setPresupuesto,
+        // addLocalStorage,
+        // addToLocalStorage,
+      }}
     >
       {children}
     </PresupuestoContext.Provider>

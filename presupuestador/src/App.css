@@ -73,7 +73,9 @@ h3, h4{
 
 } */
 
-
+#canvas{
+  display: none;
+}
 
 
 /* styles reac calendar */

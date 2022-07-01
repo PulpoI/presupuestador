@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { PresupuestoContext } from "./PresupuestoContext";
 import Checkbox from "./Checkbox";
+import { Link } from "react-router-dom";
+import html2canvas from "html2canvas";
 
 const Form = () => {
   const { presupuesto } = useContext(PresupuestoContext);
@@ -11,13 +13,27 @@ const Form = () => {
     setCheckbox(!checkbox);
   };
 
-  console.log(checkbox);
+  //generate jpg
+  const generateJpg = () => {
+    html2canvas(document.querySelector(".captura")).then((canvas) => {
+      let enlace = document.createElement("a");
+      enlace.download = "presupuesto.jpg";
+      enlace.href = canvas.toDataURL();
+      enlace.click();
+    });
+  };
+
   return (
     <>
-      {presupuesto.length === 0 ? (
-        <h1>NO HAY presupuesto</h1>
+      {presupuesto.servicio.length === 0 ? (
+        <div className="container-xl text-center mt-5">
+          <h3>NO HAY presupuesto, selecciona al menos un servicio.</h3>
+          <Link to="/">
+            <button className="btn btn-primary">Volver</button>
+          </Link>
+        </div>
       ) : (
-        <div className="container-xl mt-3 ">
+        <div className="container-xl mt-3 captura">
           <nav className="text-center">
             <a
               href="https://camilagonzalez.ar/"
@@ -35,7 +51,7 @@ const Form = () => {
               <p className="items">
                 <b>Servicio/s:</b>{" "}
                 {presupuesto.servicio.map((s) => (
-                  <li>{s.label}</li>
+                  <li key={s.label}>{s.label}</li>
                 ))}
               </p>
               <p className="items">
@@ -87,6 +103,7 @@ const Form = () => {
                   <Checkbox
                     changeCheckbox={changeCheckbox}
                     checkbox={checkbox === true ? false : true}
+                    generateJpg={generateJpg}
                   />
                 </>
               }
