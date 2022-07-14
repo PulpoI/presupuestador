@@ -25,8 +25,19 @@ const Form = () => {
 
   return (
     <>
-      {presupuesto.servicio.length === 0 ? (
+      {presupuesto.length === 0 ? (
         <div className="container-xl text-center mt-5">
+          <nav className="text-center">
+            <a
+              href="https://camilagonzalez.ar/"
+              target="_blank"
+              rel="noreferrer"
+              className="logo"
+            >
+              Camila Gonzalez
+            </a>
+          </nav>
+          <h1 className="text-center">PRESUPUESTADOR</h1>
           <h3>NO HAY presupuesto, selecciona al menos un servicio.</h3>
           <Link to="/">
             <button className="btn btn-primary">Volver</button>
@@ -45,6 +56,7 @@ const Form = () => {
             </a>
           </nav>
           <h1 className="text-center">PRESUPUESTADOR</h1>
+          <div></div>
           <div className="row mt-4">
             <div className="col-xs-12 col-sm-6 col-md-5">
               <h4>Detalles del presupuesto: </h4>
@@ -99,14 +111,16 @@ const Form = () => {
                       </>
                     )}
                   </p>
-
-                  <Checkbox
-                    changeCheckbox={changeCheckbox}
-                    checkbox={checkbox === true ? false : true}
-                    generateJpg={generateJpg}
-                  />
                 </>
               }
+            </div>
+            <div className="col-xs-12 col-sm-6 col-md-7">
+              <h4>Tus datos: </h4>
+              <Checkbox
+                changeCheckbox={changeCheckbox}
+                checkbox={checkbox === true ? false : true}
+                generateJpg={generateJpg}
+              />
             </div>
           </div>
         </div>

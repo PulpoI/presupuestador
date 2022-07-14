@@ -41,12 +41,12 @@ function App() {
     {
       value: "sesionInfClasico",
       label: "Sesión infantil (Clásico)",
-      price: 5800,
+      price: 6800,
     },
     {
       value: "sesionInfMagico",
       label: "Sesión infantil (Mágico)",
-      price: 7800,
+      price: 8800,
     },
   ];
   // date dues
@@ -339,7 +339,7 @@ function App() {
             )}
             <Link to="/form">
               <button onClick={onAdd} className="btn btn-primary">
-                <b>Ver presupuesto</b>
+                Ver presupuesto
               </button>
             </Link>
           </div>

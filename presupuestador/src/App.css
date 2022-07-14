@@ -73,10 +73,15 @@ h3, h4{
 
 } */
 
-#canvas{
-  display: none;
+.btn-primary {
+  background-color: #BF7154 !important;
+  border-color: #BF7154 !important;
 }
 
+.btn-secondary {
+  background-color: #594F57 !important;
+  border-color: #594F57 !important;
+}
 
 /* styles reac calendar */
 .react-calendar { 

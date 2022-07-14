@@ -25,9 +25,7 @@ const RadioButton = ({ changeCheckbox, checkbox, generateJpg }) => {
 
   const sendOrder = (e) => {
     e.preventDefault();
-    setCreatingOrder(true);
-
-    delete formData.emailConfirm;
+    // setCreatingOrder(true);
 
     //objeto con info del comprador y su orden
     const newOrder = {
@@ -51,9 +49,18 @@ const RadioButton = ({ changeCheckbox, checkbox, generateJpg }) => {
 
   return (
     <div className="">
+      <FormGroup>
+        <Input type="checkbox" onChange={changeCheckbox} />
+        <Label check>
+          Acepto <a href="#">terminos y condiciones</a>
+        </Label>
+      </FormGroup>
       <form onSubmit={sendOrder} onChange={handleChange}>
-        <div className="mb-3 d-flex flex-column align-items-center">
-          <label className="form-label">Nombre</label>
+        <div className="mb-2 d-flex text-start flex-column ">
+          <label className="form-label">
+            <b>Nombre y apellido:</b>
+          </label>
+
           <input
             type="name"
             className="form-control form-control--color"
@@ -62,8 +69,11 @@ const RadioButton = ({ changeCheckbox, checkbox, generateJpg }) => {
             required
           />
         </div>
-        <div className="mb-3 d-flex flex-column align-items-center">
-          <label className="form-label">Teléfono</label>
+        <div className="mb-2 d-flex text-start flex-column ">
+          <label className="form-label">
+            {" "}
+            <b>Teléfono:</b>
+          </label>
           <input
             type="number"
             onkeydown="return event.keyCode !== 69"
@@ -73,17 +83,16 @@ const RadioButton = ({ changeCheckbox, checkbox, generateJpg }) => {
             required
           />
         </div>
-        <FormGroup>
-          <Input type="checkbox" onChange={changeCheckbox} />
-          <Label check>
-            Acepto <a href="#">terminos y condiciones</a>
-          </Label>
-        </FormGroup>
 
         <button
           onClick={generateJpg}
-          className="btn btn-primary"
-          disabled={!formData.name || !formData.phone || checkbox}
+          className="mt-3 btn btn-primary"
+          disabled={
+            !formData.name ||
+            !formData.phone ||
+            checkbox ||
+            presupuesto.servicio.length === 0
+          }
         >
           Enviar y Descargar presupuesto
         </button>
@@ -91,9 +100,7 @@ const RadioButton = ({ changeCheckbox, checkbox, generateJpg }) => {
 
       <hr></hr>
       <Link to="/">
-        <button className="btn btn-primary">
-          <b>Volver al presupuestador</b>
-        </button>
+        <button className=" btn btn-secondary">Volver al presupuestador</button>
       </Link>
     </div>
   );
